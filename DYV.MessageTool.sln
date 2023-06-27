@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DYV.MessageTool.EventHandlers", "DYV.MessageTool.EventHandlers\DYV.MessageTool.EventHandlers.csproj", "{89A49090-D9AB-4DBC-80C3-7BB101EA6135}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DYV.MessageTool.Agent", "DYV.MessageTool.Agent\DYV.MessageTool.Agent.csproj", "{5280A238-0EC6-4D26-A10C-2C8710D9622E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{89A49090-D9AB-4DBC-80C3-7BB101EA6135}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89A49090-D9AB-4DBC-80C3-7BB101EA6135}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89A49090-D9AB-4DBC-80C3-7BB101EA6135}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89A49090-D9AB-4DBC-80C3-7BB101EA6135}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5280A238-0EC6-4D26-A10C-2C8710D9622E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5280A238-0EC6-4D26-A10C-2C8710D9622E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5280A238-0EC6-4D26-A10C-2C8710D9622E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5280A238-0EC6-4D26-A10C-2C8710D9622E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D64AC9F3-D0A6-4EB6-9279-1051AD0ED1CF}
+	EndGlobalSection
+EndGlobal

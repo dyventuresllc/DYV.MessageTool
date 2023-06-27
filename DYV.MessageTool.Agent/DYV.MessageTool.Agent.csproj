@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5280A238-0EC6-4D26-A10C-2C8710D9622E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DYV.MessageTool.Agent</RootNamespace>
+    <AssemblyName>DYV.MessageTool.Agent</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataAccess\Queries\DELETE.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DELETE.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\Queries\SELECT.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SELECT.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\AgentHandler.cs" />
+    <Compile Include="Helpers\QueueHandler.cs" />
+    <Compile Include="Helpers\EmailHandler.cs" />
+    <Compile Include="Helpers\StatusHandler.cs" />
+    <Compile Include="Helpers\Transformers.cs" />
+    <Compile Include="MessageToolWorker.cs" />
+    <Compile Include="Models\MessageToolQueueModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="DataAccess\Queries\DELETE\CompletedItemInQueue.sql" />
+    <Content Include="DataAccess\Queries\SELECT\QueueTotal.sql" />
+    <Content Include="DataAccess\Queries\SELECT\NextItemInQueue.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Relativity.Agent">
+      <Version>17.0.4</Version>
+    </PackageReference>
+    <PackageReference Include="Relativity.Infrastructure.SDK">
+      <Version>4.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="Relativity.Services.Interfaces.SDK">
+      <Version>13.6.2</Version>
+    </PackageReference>
+    <PackageReference Include="SendGrid">
+      <Version>9.28.1</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DataAccess\Queries\DELETE.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DELETE.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataAccess\Queries\SELECT.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SELECT.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
