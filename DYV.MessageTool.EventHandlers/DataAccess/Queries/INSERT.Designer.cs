@@ -61,8 +61,8 @@ namespace DYV.MessageTool.EventHandlers.DataAccess.Queries {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO EDDS.mt.EmailQueue(ArtifactID, MsgArtifactID, FirstName, EmailAddress, [Subject], [Body])
-        ///VALUES (@UserArtifactID, @MsgArtifactID, @FirstName, @EmailAddress, @Subject, @Body);.
+        ///   Looks up a localized string similar to INSERT INTO EDDS.mt.EmailQueue(ArtifactID, WorkspaceID, MsgArtifactID, FirstName, EmailAddress, [Subject], [Body])
+        ///VALUES (@UserArtifactID, @WorkspaceID, @MsgArtifactID, @FirstName, @EmailAddress, @Subject, @Body);.
         /// </summary>
         internal static string TstUsr_toQueue {
             get {
@@ -71,9 +71,9 @@ namespace DYV.MessageTool.EventHandlers.DataAccess.Queries {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO EDDS.mt.EmailQueue(ArtifactID, MsgArtifactID, FirstName, EmailAddress, [Subject], [Body])
+        ///   Looks up a localized string similar to INSERT INTO EDDS.mt.EmailQueue(ArtifactID, WorkspaceID, MsgArtifactID, FirstName, EmailAddress, [Subject], [Body])
         ///SELECT DISTINCT
-        ///	eu.ArtifactID, @MsgArtifactID, eu.FirstName, eu.EmailAddress, @Subject, @Body
+        ///	eu.ArtifactID, @WorkspaceID ,@MsgArtifactID, eu.FirstName, eu.EmailAddress, @Subject, @Body
         ///FROM EDDS.eddsdbo.[ExtendedUser] eu WITH (NOLOCK)
         ///JOIN EDDS.eddsdbo.Artifact a WITH (NOLOCK)
         ///	ON eu.EmailPreference = a.ArtifactID
@@ -81,8 +81,7 @@ namespace DYV.MessageTool.EventHandlers.DataAccess.Queries {
         ///	ON us.UserID = eu.ArtifactID
         ///LEFT JOIN EDDS.mt.EmailQueue eq
         ///	ON eq.ArtifactID = eu.ArtifactID
-        ///WHERE 
-        ///	SUBSTRING(eu.EmailAddre [rest of string was truncated]&quot;;.
+        ///WHERE [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Usrs_Active_toQueue {
             get {
@@ -91,16 +90,16 @@ namespace DYV.MessageTool.EventHandlers.DataAccess.Queries {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO EDDS.mt.EmailQueue(ArtifactID, MsgArtifactID, FirstName, EmailAddress, [Subject], [Body])
+        ///   Looks up a localized string similar to INSERT INTO EDDS.mt.EmailQueue(ArtifactID, WorkspaceID, MsgArtifactID, FirstName, EmailAddress, [Subject], [Body])
         ///SELECT
-        ///	eu.ArtifactID, @MsgArtifactID, eu.FirstName, eu.EmailAddress, @Subject, @Body
+        ///	eu.ArtifactID, @WorkspaceID, @MsgArtifactID, eu.FirstName, eu.EmailAddress, @Subject, @Body
         ///FROM EDDS.eddsdbo.[ExtendedUser] eu WITH (NOLOCK)
         ///JOIN EDDS.eddsdbo.Artifact a WITH (NOLOCK)
         ///	ON eu.EmailPreference = a.ArtifactID
         ///LEFT JOIN EDDS.mt.EmailQueue eq
         ///	ON eq.ArtifactID = eu.ArtifactID
         ///WHERE 
-        ///	SUBSTRING(eu.EmailAddress,CHARINDEX(&apos;@&apos;,eu.EmailAddress)+1,(LEN(eu.EmailAddress)-CHARINDEX(&apos;@&apos;,eu.EmailAddress [rest of string was truncated]&quot;;.
+        ///	SUBSTRING(eu.EmailAddress,CHARINDEX(&apos;@&apos;,eu.EmailAddress)+1,(LEN(eu.EmailAddress)-CH [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Usrs_All_toQueue {
             get {
@@ -109,16 +108,16 @@ namespace DYV.MessageTool.EventHandlers.DataAccess.Queries {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO EDDS.mt.EmailQueue(ArtifactID, MsgArtifactID, FirstName, EmailAddress, [Subject], [Body])
+        ///   Looks up a localized string similar to INSERT INTO EDDS.mt.EmailQueue(ArtifactID, WorksapceID, MsgArtifactID, FirstName, EmailAddress, [Subject], [Body])
         ///SELECT
-        ///	eu.ArtifactID, @MsgArtifactID, eu.FirstName, eu.EmailAddress, @Subject, @Body
+        ///	eu.ArtifactID, @WorkspaceID, @MsgArtifactID, eu.FirstName, eu.EmailAddress, @Subject, @Body
         ///FROM EDDS.eddsdbo.[ExtendedUser] eu WITH (NOLOCK)
         ///JOIN EDDS.eddsdbo.Artifact a WITH (NOLOCK)
         ///	ON eu.EmailPreference = a.ArtifactID
         ///LEFT JOIN EDDS.mt.EmailQueue eq
         ///	ON eq.ArtifactID = eu.ArtifactID
         ///WHERE 
-        ///	SUBSTRING(eu.EmailAddress,CHARINDEX(&apos;@&apos;,eu.EmailAddress)+1,(LEN(eu.EmailAddress)-CHARINDEX(&apos;@&apos;,eu.EmailAddress [rest of string was truncated]&quot;;.
+        ///	SUBSTRING(eu.EmailAddress,CHARINDEX(&apos;@&apos;,eu.EmailAddress)+1,(LEN(eu.EmailAddress)-CH [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Usrs_Enabled_toQueue {
             get {

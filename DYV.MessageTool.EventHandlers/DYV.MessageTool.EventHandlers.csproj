@@ -48,6 +48,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>INSERT.resx</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\StatusHandler.cs" />
     <Compile Include="Helpers\DataHandler.cs" />
     <Compile Include="PrSEH_MessageTool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -59,6 +60,9 @@
     </PackageReference>
     <PackageReference Include="Relativity.EventHandler">
       <Version>17.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Relativity.ObjectManager">
+      <Version>12.1.171.20</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

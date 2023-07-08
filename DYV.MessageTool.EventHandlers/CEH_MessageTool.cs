@@ -35,18 +35,25 @@ namespace DYV.MessageTool.EventHandlers
             return returnConsole;
         }
 
-        public override void OnButtonClick(ConsoleButton consoleButton)
+        public override async void OnButtonClick(ConsoleButton consoleButton)
         {
             MT_References references = new MT_References();
             IDBContext eddsDbContext;
             DataHandler dataHandler;
+            StatusHandler statusHandler;
             logger = Helper.GetLoggerFactory().GetLogger();
-
+            IServicesMgr servicesMgr;
+            servicesMgr = Helper.GetServicesManager();            
             eddsDbContext = Helper.GetDBContext(-1);
+            int workspaceId = Helper.GetActiveCaseID();
             dataHandler = new DataHandler(eddsDbContext, logger);
-            int rows = 0;
+            statusHandler = new StatusHandler(servicesMgr, eddsDbContext, logger);            
             string msgSubject = ActiveArtifact.Fields[references.MessageSubject.ToString()].Value.Value.ToString();
             string msgBody = ActiveArtifact.Fields[references.MessageBody.ToString()].Value.Value.ToString();      
+            int userArtifactId = Helper.GetAuthenticationManager().UserInfo.ArtifactID;
+            string firstName = Helper.GetAuthenticationManager().UserInfo.FirstName;
+            string userEmail = Helper.GetAuthenticationManager().UserInfo.EmailAddress;
+            int rows = 0;
 
             switch (consoleButton.Name)
             {
@@ -56,44 +63,44 @@ namespace DYV.MessageTool.EventHandlers
                         if ((bool)ActiveArtifact.Fields[references.MessageTo_AllUsersEnabled.ToString()].Value.Value)
                         {              
                             logger.LogInformation("Message Tool - Sending Email to All Enabled Users");
-                            rows = dataHandler.InsertEnabledUsersToQueue(ActiveArtifact.ArtifactID, msgSubject, msgBody);
+                            rows = dataHandler.InsertEnabledUsersToQueue(ActiveArtifact.ArtifactID, workspaceId, msgSubject, msgBody);
                         }
 
                         if ((bool)ActiveArtifact.Fields[references.MessageTo_AllUsers.ToString()].Value.Value)
                         {
                             logger.LogInformation("Message Tool - Sending Email to All Users");
-                            rows = dataHandler.InsertAllUsersToQueue(ActiveArtifact.ArtifactID, msgSubject, msgBody);
+                            rows = dataHandler.InsertAllUsersToQueue(workspaceId, ActiveArtifact.ArtifactID, msgSubject, msgBody);
                         }
 
                         if ((bool)ActiveArtifact.Fields[references.MessageTo_AllUsersActive.ToString()].Value.Value)
                         {
                             logger.LogInformation("Message Tool - Sending Email to Active Users");
-                            rows = dataHandler.InsertActiveUsersToQueue(ActiveArtifact.ArtifactID, msgSubject, msgBody);
+                            rows = dataHandler.InsertActiveUsersToQueue(workspaceId, ActiveArtifact.ArtifactID, msgSubject, msgBody);
                         }
                         logger.LogInformation($"Message Tools - Inserted {rows} records into queue");
                     }
                     catch (Exception ex)
                     {
                         logger.LogError($"Message Tool - (error sending email) - detail: {ex.Message}");
+                        return;
                     }
                 break;
 
                 case "SendEmailTest":
-                    int userArtifactId = Helper.GetAuthenticationManager().UserInfo.ArtifactID;
-                    string firstName = Helper.GetAuthenticationManager().UserInfo.FirstName;
-                    string userEmail = Helper.GetAuthenticationManager().UserInfo.EmailAddress;
                    
                     try 
                     {
-                        rows = dataHandler.InsertTestMessageToQueue(userArtifactId, ActiveArtifact.ArtifactID, firstName, userEmail, msgSubject, msgBody);
-                        logger.LogInformation($"Message Tools - Inserted {rows} records into queue");
+                        rows = dataHandler.InsertTestMessageToQueue(userArtifactId, workspaceId, ActiveArtifact.ArtifactID, firstName, userEmail, msgSubject, msgBody);
+                        logger.LogInformation($"Message Tools - Inserted {rows} records into queue");                       
                     }
                     catch (Exception ex) 
                     {
-                        logger.LogError($"Message Tool - (error sending test email) - detail: {ex.Message}");                        
+                        logger.LogError($"Message Tool - (error sending test email) - detail: {ex.Message}");
+                        return;
                     }
                 break;
             }
+            await statusHandler.UpdateJobStatus(references.SubmittedToQueue, workspaceId, this.ActiveArtifact.ArtifactID, userArtifactId);
         }
     }
 }

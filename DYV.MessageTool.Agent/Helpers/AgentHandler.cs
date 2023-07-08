@@ -34,7 +34,7 @@ namespace DYV.MessageTool.Agent.Helpers
                     AgentResponse response = agntMngr.ReadAsync(workspaceArtifactId, agntArtifactId).Result;
                     agntTypeId = response.AgentType.Value.ArtifactID;
                     agntServerId = response.AgentServer.Value.ArtifactID;
-                    agntCurrentInterval = int.Parse(response.Interval.ToString());
+                    agntCurrentInterval = decimal.ToInt32(response.Interval);
                     agntCurrentLoggingLevel = response.LoggingLevel;
                 }
                 catch (Exception ex)
@@ -46,7 +46,7 @@ namespace DYV.MessageTool.Agent.Helpers
             }
         }
 
-        public void updateAgentConfiguration(AgentBase agnt, int agentArtifactId, int agentServerId, int agentTypeId)
+        public void UpdateAgentConfiguration(AgentBase agnt, int agentArtifactId, int agentServerId, int agentTypeId)
         {
             AgentRequest agentRequest = new AgentRequest
             {

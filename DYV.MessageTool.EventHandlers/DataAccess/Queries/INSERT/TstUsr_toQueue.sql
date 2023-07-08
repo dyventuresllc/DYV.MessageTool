@@ -1,2 +1,2 @@
-﻿INSERT INTO EDDS.mt.EmailQueue(ArtifactID, MsgArtifactID, FirstName, EmailAddress, [Subject], [Body])
-VALUES (@UserArtifactID, @MsgArtifactID, @FirstName, @EmailAddress, @Subject, @Body);
+﻿INSERT INTO EDDS.mt.EmailQueue(ArtifactID, WorkspaceID, MsgArtifactID, FirstName, EmailAddress, [Subject], [Body])
+VALUES (@UserArtifactID, @WorkspaceID, @MsgArtifactID, @FirstName, @EmailAddress, @Subject, @Body);

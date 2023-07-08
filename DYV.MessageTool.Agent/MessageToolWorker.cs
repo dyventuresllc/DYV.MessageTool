@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using DYV.MessageTool.Agent.Helpers;
 using DYV.MessageTool.Agent.Models;
+using DYV.MessageTool.EventHandlers.References;
 using kCura.Agent;
 using Relativity.API;
 
@@ -14,7 +14,6 @@ namespace DYV.MessageTool.Agent
         public override string Name => "Message Tool Agent";
 
         private IAPILog _logger;
-        private Stopwatch _sw;
         public override void Execute()
         {
             RaiseMessageNoLogging(string.Empty, 5);
@@ -22,20 +21,21 @@ namespace DYV.MessageTool.Agent
             IServicesMgr srvcsMgr;
             srvcsMgr = Helper.GetServicesManager();           
             int agentArtifactId = AgentID;
+            MT_References references= new MT_References();
 
             try
             {
-                int agentTypeID = 0;
-                int agentServerID = 0;
-                int agentCurrentInterval = 0;
-                int agentCurrentLoggingLevel = 0;
+                //int agentTypeID = 0;
+                //int agentServerID = 0;
+                //int agentCurrentInterval = 0;
+                //int agentCurrentLoggingLevel = 0;
 
                 AgentHandler agentHandler = new AgentHandler(srvcsMgr, _logger);
-                agentHandler.GetAgentTypeIdAndServerId((this), agentArtifactId, out agentTypeID, out agentServerID, out agentCurrentInterval, out agentCurrentLoggingLevel);
+                agentHandler.GetAgentTypeIdAndServerId((this), agentArtifactId, out int agentTypeID, out int agentServerID, out int agentCurrentInterval, out int agentCurrentLoggingLevel);
 
                 if (agentCurrentInterval != 60 && agentCurrentLoggingLevel != 5) //defaults for logging and interval
                 {
-                    agentHandler.updateAgentConfiguration((this),agentArtifactId, agentServerID, agentTypeID);
+                    agentHandler.UpdateAgentConfiguration((this),agentArtifactId, agentServerID, agentTypeID);
                 }
             }
             catch (Exception ex)
@@ -56,7 +56,7 @@ namespace DYV.MessageTool.Agent
 
             try
             {
-                QueueHandler queueHandler = new QueueHandler(eddsDbContext, _logger);
+                QueueHandler queueHandler = new QueueHandler(eddsDbContext);
                 int queueTotal = queueHandler.QueueTotal();
 
                 if (queueTotal == 0)
@@ -64,21 +64,30 @@ namespace DYV.MessageTool.Agent
                     return;
                 }
                 else
-                {
-                    StatusHandler statusHandler = new StatusHandler();
+                {                    
+                    StatusHandler statusHandler = new StatusHandler(srvcsMgr, _logger);
                     var statusTable = statusHandler.MsgStatus();
                     var statusReceipients = statusHandler.MsgReceipients();                    
                     int i = 0;
+                    int workspaceID = 0;
+                    int MsgID = 0;
 
                     while (i < queueHandler.QueueTotal())
                     {
                         queueItem = queueHandler.NextJobInQueue(agentArtifactId);
+                                                
+                        if (i== 0)
+                            statusHandler.UpdateJobStatus(references.SendingInProgess, queueItem.WorkspaceID, queueItem.MsgArtifactID).Wait();  //update once
+                        
+                        workspaceID = queueItem.WorkspaceID;
+                        MsgID = queueItem.MsgArtifactID;
 
                         try
                         {
-                            EmailHandler.SendEmail(smtpPassword, emailFromAddress, queueItem.EmailAddress, queueItem.Subject, queueItem.Body);
+                            EmailHandler.SendEmail(smtpPassword, emailFromAddress, queueItem.EmailAddress, queueItem.Subject, queueItem.Body, queueItem.FirstName);
                             queueHandler.CompletedJob(queueItem.ArtifactID);
-                            statusTable.Rows.Add(queueItem.MsgArtifactID, DateTime.UtcNow);
+                            statusTable.NewRow();
+                            statusTable.Rows.Add(queueItem.MsgArtifactID, DateTime.Now);
                             statusReceipients.Add(queueItem.EmailAddress);
                             i++;
                         }
@@ -89,8 +98,7 @@ namespace DYV.MessageTool.Agent
                             RaiseError(errorMessage, ex.ToString());
                         }
                     }
-                    //update status msgArtifactID
-                    //objectmanager to update record job status
+                    statusHandler.UpdateJobStatus(references.SendingComplete, workspaceID, MsgID, statusReceipients, statusTable).Wait();
                 }
             }
             catch (Exception ex)

@@ -1,6 +1,6 @@
-﻿INSERT INTO EDDS.mt.EmailQueue(ArtifactID, MsgArtifactID, FirstName, EmailAddress, [Subject], [Body])
+﻿INSERT INTO EDDS.mt.EmailQueue(ArtifactID, WorkspaceID, MsgArtifactID, FirstName, EmailAddress, [Subject], [Body])
 SELECT DISTINCT
-	eu.ArtifactID, @MsgArtifactID, eu.FirstName, eu.EmailAddress, @Subject, @Body
+	eu.ArtifactID, @WorkspaceID ,@MsgArtifactID, eu.FirstName, eu.EmailAddress, @Subject, @Body
 FROM EDDS.eddsdbo.[ExtendedUser] eu WITH (NOLOCK)
 JOIN EDDS.eddsdbo.Artifact a WITH (NOLOCK)
 	ON eu.EmailPreference = a.ArtifactID

@@ -15,6 +15,7 @@
 
 	SELECT
 		ArtifactID
+		,WorkspaceID
 		,MsgArtifactID
 		,FirstName
 		,EmailAddress

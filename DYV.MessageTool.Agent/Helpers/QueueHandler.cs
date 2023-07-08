@@ -9,20 +9,20 @@ namespace DYV.MessageTool.Agent.Helpers
     public class QueueHandler
     {
         IDBContext EddsDbContext { get; set; } 
-        private IAPILog Logger { get; set; }
-
-        public QueueHandler(IDBContext eddsDbContext, IAPILog logger)
+      
+        public QueueHandler(IDBContext eddsDbContext)
         {
             EddsDbContext = eddsDbContext;
-            Logger = logger;
         }
 
         public MessageToolQueueModel NextJobInQueue(int agentID)
         {
             MessageToolQueueModel record = null;
 
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("AgentID", agentID));
+            List<SqlParameter> parameters = new List<SqlParameter>() 
+            { 
+                new SqlParameter("AgentID", agentID)
+            };
 
             DataTable dt = EddsDbContext.ExecuteSqlStatementAsDataTable(DataAccess.Queries.SELECT.NextItemInQueue, parameters);
 
@@ -36,8 +36,10 @@ namespace DYV.MessageTool.Agent.Helpers
 
         public void CompletedJob(int queueID)
         {
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("QueueID", queueID));
+            List<SqlParameter> parameters = new List<SqlParameter>()
+            { 
+                new SqlParameter("QueueID", queueID)
+            };
 
             EddsDbContext.ExecuteNonQuerySQLStatement(DataAccess.Queries.DELETE.CompletedItemInQueue, parameters);
         }
@@ -45,8 +47,7 @@ namespace DYV.MessageTool.Agent.Helpers
         public int QueueTotal()
         {
             int total = (int)EddsDbContext.ExecuteSqlStatementAsScalar(DataAccess.Queries.SELECT.QueueTotal);
-
-            return 0;
+            return total;
         }
     }
 }

@@ -4,6 +4,7 @@ namespace DYV.MessageTool.Agent.Models
     public class MessageToolQueueModel
     {
         public int ArtifactID { get; set; }
+        public int WorkspaceID { get; set; }
         public int MsgArtifactID { get; set; }
         public string FirstName { get; set; }
         public string EmailAddress { get; set; }

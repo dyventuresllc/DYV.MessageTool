@@ -64,7 +64,12 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\DYV.MessageTool.EventHandlers\DYV.MessageTool.EventHandlers.csproj">
+      <Project>{89a49090-d9ab-4dbc-80c3-7bb101ea6135}</Project>
+      <Name>DYV.MessageTool.EventHandlers</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="DataAccess\Queries\DELETE\CompletedItemInQueue.sql" />
     <Content Include="DataAccess\Queries\SELECT\QueueTotal.sql" />
