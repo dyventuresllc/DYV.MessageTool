@@ -25,11 +25,6 @@ namespace DYV.MessageTool.Agent
 
             try
             {
-                //int agentTypeID = 0;
-                //int agentServerID = 0;
-                //int agentCurrentInterval = 0;
-                //int agentCurrentLoggingLevel = 0;
-
                 AgentHandler agentHandler = new AgentHandler(srvcsMgr, _logger);
                 agentHandler.GetAgentTypeIdAndServerId((this), agentArtifactId, out int agentTypeID, out int agentServerID, out int agentCurrentInterval, out int agentCurrentLoggingLevel);
 
@@ -72,7 +67,7 @@ namespace DYV.MessageTool.Agent
                     int workspaceID = 0;
                     int MsgID = 0;
 
-                    while (i < queueHandler.QueueTotal())
+                    while (i <= queueHandler.QueueTotal())
                     {
                         queueItem = queueHandler.NextJobInQueue(agentArtifactId);
                                                 
@@ -84,7 +79,7 @@ namespace DYV.MessageTool.Agent
 
                         try
                         {
-                            EmailHandler.SendEmail(smtpPassword, emailFromAddress, queueItem.EmailAddress, queueItem.Subject, queueItem.Body, queueItem.FirstName);
+                            //EmailHandler.SendEmail(smtpPassword, emailFromAddress, queueItem.EmailAddress, queueItem.Subject, queueItem.Body, queueItem.FirstName);
                             queueHandler.CompletedJob(queueItem.ArtifactID);
                             statusTable.NewRow();
                             statusTable.Rows.Add(queueItem.MsgArtifactID, DateTime.Now);

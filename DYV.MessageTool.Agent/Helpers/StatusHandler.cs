@@ -48,10 +48,10 @@ namespace DYV.MessageTool.Agent.Helpers
            return  new List<string>();
         }
 
-
         public async Task UpdateJobStatus(Guid statusChoice, int workspaceId, int recordId, List<string> MsgRecipients, DataTable MsgTimeSpan)
         {
-            double duration = 0;
+            double minDuration = 0;
+            double secondDuration = 0;
 
             var StatusDetails = from x in MsgTimeSpan.AsEnumerable()
                          group x by new { x =  x.Field<Int32>("MsgArtifactID") }
@@ -67,10 +67,11 @@ namespace DYV.MessageTool.Agent.Helpers
              
             foreach (var detail in StatusDetails)
             {
-                duration = (detail.MaxSentDateTime - detail.MinSentDateTime).TotalMinutes;
+                minDuration = ((detail.MaxSentDateTime - detail.MinSentDateTime).TotalSeconds / 60);
+                secondDuration = ((detail.MaxSentDateTime - detail.MinSentDateTime).TotalSeconds % 60);
             }
 
-            string msg = $"<p>Duration: {duration} minutes</p><hr/><p>Receipient List:<br/>{receipientList}</p>";
+            string msg = $"<p>Duration {minDuration} minutes, {secondDuration} seconds.</p><hr/><p>Receipient List:<br/>{receipientList}</p>";
 
             using (IObjectManager objectManager = ServicesMgr.CreateProxy<IObjectManager>(ExecutionIdentity.CurrentUser))
             {

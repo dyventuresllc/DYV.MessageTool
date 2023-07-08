@@ -5,8 +5,7 @@
 	SELECT TOP (1)
 		@QueueID = mt.ArtifactID
 	FROM EDDS.mt.EmailQueue mt
-	WHERE mt.ArtifactID = @QueueID
-		OR mt.AgentID = 0
+	WHERE mt.AgentID = 0
 
 	UPDATE mt 
 		SET	mt.[AgentID] = @AgentID

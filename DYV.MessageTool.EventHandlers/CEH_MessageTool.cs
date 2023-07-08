@@ -23,14 +23,31 @@ namespace DYV.MessageTool.EventHandlers
 
         public override kCura.EventHandler.Console GetConsole(PageEvent pageEvent)
         {
+            MT_References references = new MT_References();
+            bool enabledBtn = true;
+
             kCura.EventHandler.Console returnConsole = new kCura.EventHandler.Console()
             {
                 Items = new List<IConsoleItem>()
             };
 
+
+            ChoiceFieldValue statusChoiceField = (ChoiceFieldValue)ActiveArtifact.Fields[references.Status.ToString()].Value;
+
+            if (!statusChoiceField.IsNull)
+            {
+                foreach (Choice choiceValue in statusChoiceField.Choices)
+                {
+                    if (choiceValue.Name != "Sending Complete")
+                    {
+                        enabledBtn= false;
+                    }
+                }
+            }
+
             returnConsole.Items.Add(new ConsoleButton() { Name = "SendEmailTest", DisplayText = "Email Yourself (Test)", Enabled = true, RaisesPostBack = true });
             returnConsole.Items.Add(new ConsoleSeparator());
-            returnConsole.Items.Add(new ConsoleButton() { Name = "SendEmail", DisplayText = "Send Email", Enabled = true, RaisesPostBack = true });
+            returnConsole.Items.Add(new ConsoleButton() { Name = "SendEmail", DisplayText = "Send Email", Enabled = enabledBtn, RaisesPostBack = true });
 
             return returnConsole;
         }
@@ -47,7 +64,7 @@ namespace DYV.MessageTool.EventHandlers
             eddsDbContext = Helper.GetDBContext(-1);
             int workspaceId = Helper.GetActiveCaseID();
             dataHandler = new DataHandler(eddsDbContext, logger);
-            statusHandler = new StatusHandler(servicesMgr, eddsDbContext, logger);            
+            statusHandler = new StatusHandler(servicesMgr, logger);            
             string msgSubject = ActiveArtifact.Fields[references.MessageSubject.ToString()].Value.Value.ToString();
             string msgBody = ActiveArtifact.Fields[references.MessageBody.ToString()].Value.Value.ToString();      
             int userArtifactId = Helper.GetAuthenticationManager().UserInfo.ArtifactID;

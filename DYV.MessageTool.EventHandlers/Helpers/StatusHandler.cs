@@ -11,13 +11,11 @@ namespace DYV.MessageTool.EventHandlers.Helpers
 {
     public class StatusHandler
     {
-        IDBContext EddsDbContext { get; set; }
         private IAPILog Logger { get; set; }
         internal IServicesMgr ServicesMgr { get; private set; }
         internal MT_References References { get; set; }
-        public StatusHandler(IServicesMgr servicesMgr, IDBContext eddsDbContext, IAPILog logger)
+        public StatusHandler(IServicesMgr servicesMgr, IAPILog logger)
         {
-            EddsDbContext = eddsDbContext;
             Logger = logger;
             ServicesMgr = servicesMgr;
             References = new MT_References();
@@ -27,39 +25,39 @@ namespace DYV.MessageTool.EventHandlers.Helpers
         {
             using (IObjectManager objectManager = ServicesMgr.CreateProxy<IObjectManager>(ExecutionIdentity.CurrentUser))
             {
-                List<FieldRefValuePair> fieldValues = new List<FieldRefValuePair>();
-
-                fieldValues.Add(new FieldRefValuePair()
+                List<FieldRefValuePair> fieldValues = new List<FieldRefValuePair>()
                 {
-                    Field = new FieldRef()
+                    new FieldRefValuePair()
                     {
-                        Guid = References.LastSentBy
+                        Field = new FieldRef()
+                        {
+                            Guid = References.LastSentBy
+                        },
+                        Value = new UserRef()
+                        {
+                            ArtifactID = userId
+                        }
                     },
-                    Value = new UserRef()
+                    new FieldRefValuePair()
                     {
-                        ArtifactID = userId
-                    }
-                });
-
-                fieldValues.Add(new FieldRefValuePair() 
-                { 
-                    Field = new FieldRef() 
-                    { 
-                        Guid = References.LastSentDate 
-                    }, Value = DateTime.Now 
-                });
-
-                fieldValues.Add(new FieldRefValuePair()
-                {
-                    Field = new FieldRef()
-                    {
-                        Guid = References.Status
+                        Field = new FieldRef()
+                        {
+                            Guid = References.LastSentDate
+                        }, 
+                        Value = DateTime.UtcNow
                     },
-                    Value = new ChoiceRef()
+                    new FieldRefValuePair()
                     {
-                        Guid = statusChoice
+                        Field = new FieldRef()
+                        {
+                            Guid = References.Status
+                        },
+                        Value = new ChoiceRef()
+                        {
+                            Guid = statusChoice
+                        }
                     }
-                });
+                };
 
                 UpdateRequest updateRequest = new UpdateRequest()
                 {
@@ -72,15 +70,15 @@ namespace DYV.MessageTool.EventHandlers.Helpers
                     UpdateBehavior = FieldUpdateBehavior.Replace
                 };
 
-                try 
-                { 
-                    await objectManager.UpdateAsync(workspaceId, updateRequest, updateOptions); 
+                try
+                {
+                    await objectManager.UpdateAsync(workspaceId, updateRequest, updateOptions);
                 }
-                catch (Exception ex) 
+                catch (Exception ex)
                 {
                     Logger.LogError($"Message Tool - (error updating status fields) - detail: {ex.Message}");
                     return;
-                }                   
+                }
             }
         }
     }
