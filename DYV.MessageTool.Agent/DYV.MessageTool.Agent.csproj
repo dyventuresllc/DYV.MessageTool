@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="_Deploy\DYV.Message_Tool.rap" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DYV.MessageTool.EventHandlers\DYV.MessageTool.EventHandlers.csproj">
