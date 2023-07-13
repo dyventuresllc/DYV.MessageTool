@@ -52,7 +52,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SELECT.resx</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\AgentHandler.cs" />
     <Compile Include="Helpers\QueueHandler.cs" />
     <Compile Include="Helpers\EmailHandler.cs" />
     <Compile Include="Helpers\StatusHandler.cs" />

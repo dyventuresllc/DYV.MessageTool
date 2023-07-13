@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DYV.MessageTool.EventHandle
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DYV.MessageTool.Agent", "DYV.MessageTool.Agent\DYV.MessageTool.Agent.csproj", "{5280A238-0EC6-4D26-A10C-2C8710D9622E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{ABDA5372-5FB0-4623-B82F-B8D34A01DCE0}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\..\Downloads\DYV.Message_Tool.rap = ..\..\..\..\..\Downloads\DYV.Message_Tool.rap
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

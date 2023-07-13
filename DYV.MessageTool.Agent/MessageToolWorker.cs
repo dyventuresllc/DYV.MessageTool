@@ -16,41 +16,23 @@ namespace DYV.MessageTool.Agent
         private IAPILog _logger;
         public override void Execute()
         {
-            RaiseMessageNoLogging(string.Empty, 5);
             _logger = Helper.GetLoggerFactory().GetLogger();
             IServicesMgr srvcsMgr;
             srvcsMgr = Helper.GetServicesManager();           
             int agentArtifactId = AgentID;
             MT_References references= new MT_References();
-
-            try
-            {
-                AgentHandler agentHandler = new AgentHandler(srvcsMgr, _logger);
-                agentHandler.GetAgentTypeIdAndServerId((this), agentArtifactId, out int agentTypeID, out int agentServerID, out int agentCurrentInterval, out int agentCurrentLoggingLevel);
-
-                if (agentCurrentInterval != 60 && agentCurrentLoggingLevel != 5) //defaults for logging and interval
-                {
-                    agentHandler.UpdateAgentConfiguration((this),agentArtifactId, agentServerID, agentTypeID);
-                }
-            }
-            catch (Exception ex)
-            {
-                string errorMessage1 = "Agent configuration error";
-                _logger.LogError(ex, errorMessage1);
-                RaiseError(ex.ToString(), ex.ToString());
-                return;
-            }
-
             IDBContext eddsDbContext = Helper.GetDBContext(-1);
             MessageToolQueueModel queueItem;
             var instanceSettingManager = Helper.GetInstanceSettingBundle();
 
             string smtpPassword = instanceSettingManager.GetStringAsync("QuinnEmanuel.Notification", "SMTPPassword").Result;
             string emailFromAddress = instanceSettingManager.GetStringAsync("QuinnEmanuel.Notification", "EmailFromAddress").Result;
+            _logger.LogInformation("instance setting values obtained");
             string errorMessage;
-
+            int agentLoggingLevel = 10;
             try
             {
+                RaiseMessage("Starting.", agentLoggingLevel);
                 QueueHandler queueHandler = new QueueHandler(eddsDbContext);
                 int queueTotal = queueHandler.QueueTotal();
 
@@ -79,7 +61,8 @@ namespace DYV.MessageTool.Agent
 
                         try
                         {
-                            //EmailHandler.SendEmail(smtpPassword, emailFromAddress, queueItem.EmailAddress, queueItem.Subject, queueItem.Body, queueItem.FirstName);
+                            RaiseMessage("Sending emails", agentLoggingLevel);
+                            EmailHandler.SendEmail(smtpPassword, emailFromAddress, queueItem.EmailAddress, queueItem.Subject, queueItem.Body, queueItem.FirstName);
                             queueHandler.CompletedJob(queueItem.ArtifactID);
                             statusTable.NewRow();
                             statusTable.Rows.Add(queueItem.MsgArtifactID, DateTime.Now);
@@ -94,6 +77,7 @@ namespace DYV.MessageTool.Agent
                         }
                     }
                     statusHandler.UpdateJobStatus(references.SendingComplete, workspaceID, MsgID, statusReceipients, statusTable).Wait();
+                    RaiseMessage("Done", agentLoggingLevel);
                 }
             }
             catch (Exception ex)
