@@ -47,7 +47,7 @@ namespace DYV.MessageTool.EventHandlers
 
             returnConsole.Items.Add(new ConsoleButton() { Name = "SendEmailTest", DisplayText = "Email Yourself (Test)", Enabled = true, RaisesPostBack = true });
             returnConsole.Items.Add(new ConsoleSeparator());
-            returnConsole.Items.Add(new ConsoleButton() { Name = "SendEmail", DisplayText = "Send Email", Enabled = enabledBtn, RaisesPostBack = true });
+            returnConsole.Items.Add(new ConsoleButton() { Name = "SendEmail", DisplayText = "Send Email", Enabled = false/*enabledBtn*/, RaisesPostBack = true });
 
             return returnConsole;
         }
@@ -95,6 +95,7 @@ namespace DYV.MessageTool.EventHandlers
                             rows = dataHandler.InsertActiveUsersToQueue(workspaceId, ActiveArtifact.ArtifactID, msgSubject, msgBody);
                         }
                         logger.LogInformation($"Message Tools - Inserted {rows} records into queue");
+                        AgentHandler.StartAgent(servicesMgr, logger);
                     }
                     catch (Exception ex)
                     {
@@ -108,7 +109,8 @@ namespace DYV.MessageTool.EventHandlers
                     try 
                     {
                         rows = dataHandler.InsertTestMessageToQueue(userArtifactId, workspaceId, ActiveArtifact.ArtifactID, firstName, userEmail, msgSubject, msgBody);
-                        logger.LogInformation($"Message Tools - Inserted {rows} records into queue");                       
+                        logger.LogInformation($"Message Tools - Inserted {rows} records into queue");
+                        AgentHandler.StartAgent(servicesMgr, logger);
                     }
                     catch (Exception ex) 
                     {
